@@ -4,13 +4,24 @@
 define('ROOT', __DIR__);
 require_once ROOT . '/config/database.php';
 $name = (string)($_GET['f'] ?? '');
+/* One retry: the first query against a cold database can fail. A missing row stays a 404,
+   but a database problem must say 503 instead of pretending the picture does not exist. */
 $row = false;
-try {
-    $st = db_connect()->prepare('SELECT mime, data FROM files WHERE name = ?');
-    $st->execute([$name]);
-    $row = $st->fetch();
-} catch (Throwable $e) {
-    $row = false;
+for ($try = 0; $try < 2; $try++) {
+    try {
+        $st = db_connect()->prepare('SELECT mime, data FROM files WHERE name = ?');
+        $st->execute([$name]);
+        $row = $st->fetch();
+        break;
+    } catch (Throwable $e) {
+        error_log('serve_upload failed: ' . $e->getMessage());
+        if ($try === 1) {
+            http_response_code(503);
+            header('Retry-After: 2');
+            header('Content-Type: text/plain; charset=utf-8');
+            exit('The file could not be loaded. Please try again.');
+        }
+    }
 }
 if (!$row) {
     http_response_code(404);
