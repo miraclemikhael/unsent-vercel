@@ -24,6 +24,11 @@ if (preg_match('~^/uploads/([\w.\-]+)$~', $path, $m)) {
     require $app . '/serve_upload.php';
     return;
 }
+/* read-only database report; it answers only with the right DIAG_KEY (otherwise 404, inside the file) */
+if ($path === '/db-check.php') {
+    require $app . '/db-check.php';
+    return;
+}
 http_response_code(404);
 header('Content-Type: text/html; charset=utf-8');
 echo '<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Not found · Unsent</title>'

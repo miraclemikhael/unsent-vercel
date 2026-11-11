@@ -1,8 +1,12 @@
 -- Unsent database structure (tables only, no data, safe for GitHub).
--- HeidiSQL: File > Run SQL file... > pick this file. Safe to run again: it never deletes anything.
--- With empty tables the site creates its first demo user by itself.
-CREATE DATABASE IF NOT EXISTS `unsent` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `unsent`;
+-- Safe to run again: it never deletes anything.
+-- IMPORTANT: this file does not create or select a database, because managed MySQL
+-- (TiDB, Aiven, filess.io, a shared host ...) does not let you create one and the
+-- name is usually fixed by the provider.
+--   phpMyAdmin : click your database in the left column first, then Import this file.
+--   HeidiSQL   : right-click your database > "Run SQL file...", or select it first.
+--   CLI        : mysql -h HOST -P PORT -u USER -p YOUR_DB_NAME < app/config/schema.sql
+-- On an empty database the site starts with no accounts: open it and choose "Create account".
 SET NAMES utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `users` (
