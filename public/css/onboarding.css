@@ -1,0 +1,49 @@
+/* Unsent · css/onboarding.css · first-run welcome for the phone layout (2 slides).
+   Shown only when: screen <= 900px wide AND the visitor has never finished it (localStorage "unsent-onb").
+   Desktop / returning visitors never see it. Test any time with  ?onb=1  on the address. */
+#onb { display: none; }
+html.onb body { overflow: hidden; }
+html.onb #onb {
+  --o-bg: #fdf8f5; --o-ink: #3b3b3b; --o-mut: #7b7773; --o-y: #ffee83; --o-bar: #464646;
+  display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 1000;
+  background: var(--o-bg); color: var(--o-ink); color-scheme: light;
+  font-family: Manrope, system-ui, sans-serif; overflow: hidden; touch-action: pan-y;
+  padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+  transition: opacity .45s ease, transform .55s cubic-bezier(.6, 0, .2, 1);
+}
+html.onb #onb.out { opacity: 0; transform: translateY(-3%); pointer-events: none; }
+@media (min-width: 901px) { html.onb #onb { display: none; } html.onb body { overflow: auto; } }
+
+/* progress pill, top right (one pill, the yellow half moves) */
+.onb-bar { position: absolute; right: 30px; top: calc(env(safe-area-inset-top, 0px) + 34px); width: 64px; height: 7px; border-radius: 99px; background: var(--o-bar); overflow: hidden; z-index: 2; }
+.onb-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 50%; border-radius: 99px; background: var(--o-y); box-shadow: inset 0 0 0 1px var(--o-bar); transition: transform .5s cubic-bezier(.3, .9, .3, 1); }
+#onb[data-i="1"] .onb-bar i { transform: translateX(100%); }
+
+/* sliding pages */
+.onb-track { flex: 1; min-height: 0; display: flex; width: 200%; transition: transform .55s cubic-bezier(.3, .9, .3, 1); }
+#onb[data-i="1"] .onb-track { transform: translateX(-50%); }
+.onb-page { flex: 0 0 50%; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(20px, 5vh, 52px); padding: 76px 28px 24px; text-align: center; }
+.onb-page h2 { margin: 0; font-family: Caveat, cursive; font-weight: 700; font-size: clamp(32px, 9vw, 42px); line-height: 1.05; letter-spacing: .2px; color: var(--o-ink); text-wrap: balance; max-width: 11em; }
+.onb-art { width: min(80vw, 340px); max-height: 38vh; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
+.onb-page p { margin: 0; max-width: 21em; font-size: 16px; line-height: 1.55; font-weight: 500; color: var(--o-mut); text-wrap: balance; }
+
+/* entrance: heading drops in, picture floats up, text fades */
+.onb-page > * { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .8, .2, 1); }
+#onb[data-i="0"] .onb-page:nth-child(1) > *, #onb[data-i="1"] .onb-page:nth-child(2) > * { opacity: 1; transform: none; }
+#onb .onb-page:nth-child(n) > :nth-child(2) { transition-delay: .12s; }
+#onb .onb-page:nth-child(n) > :nth-child(3) { transition-delay: .24s; }
+#onb[data-i="0"] .onb-page:nth-child(1) .onb-art, #onb[data-i="1"] .onb-page:nth-child(2) .onb-art { animation: onb-float 5s ease-in-out .9s infinite; }
+@keyframes onb-float { 50% { transform: translateY(-7px); } }
+
+/* footer: Skip on the left, main button on the right */
+.onb-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 30px 34px; }
+.onb-skip { background: none; border: 0; padding: 12px 6px; font: inherit; font-size: 14px; font-weight: 600; color: var(--o-mut); cursor: pointer; transition: opacity .3s; }
+#onb[data-i="1"] .onb-skip { opacity: 0; pointer-events: none; }
+.onb-next { margin-left: auto; min-height: 46px; padding: 0 30px; border-radius: 10px; border: 1px solid var(--o-ink); background: var(--o-y); color: #1f1f1f; font: 600 16px Manrope, system-ui, sans-serif; cursor: pointer; transition: transform .15s, box-shadow .2s; }
+.onb-next:active { transform: scale(.96); }
+.onb-next:focus-visible, .onb-skip:focus-visible { outline: 2px solid var(--o-ink); outline-offset: 3px; }
+
+@media (max-height: 640px) { .onb-art { max-height: 30vh; } .onb-page { padding-top: 64px; gap: 14px; } .onb-foot { padding-bottom: 20px; } }
+@media (prefers-reduced-motion: reduce) {
+  #onb, #onb *, .onb-track, .onb-bar i { transition-duration: .01ms !important; transition-delay: 0s !important; animation: none !important; }
+}

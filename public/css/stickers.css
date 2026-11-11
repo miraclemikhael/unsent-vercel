@@ -1,0 +1,36 @@
+/* Unsent · css/stickers.css · pictures placed on the note (js/stickers.js).
+   The picture floats above the words, and two invisible floats shaped like the pictures make the words flow around them.
+   The editor is a normal block (not a flex column) so those floats really work: words above a picture stay put,
+   words beside it get shorter, words below it carry on. */
+.ed .sheet { position: relative; }
+
+/* paragraphs keep their old 22px spacing without flex */
+.ed .sheet #ed { display: block; }
+.ed .sheet #ed > * + * { margin-top: 22px; }
+
+/* the two invisible float shapes (sizes are set from js/stickers.js) */
+.ed .sheet #ed::before,
+.ed .sheet #ed > :first-child::before { content: ""; pointer-events: none; }
+.ed .sheet #ed::before { float: left; width: var(--lw, 0px); height: var(--lh, 0px); shape-outside: var(--ls, none); }
+.ed .sheet #ed > :first-child::before { float: right; width: var(--rw, 0px); height: var(--rh, 0px); shape-outside: var(--rs, none); }
+
+/* a picture on the note: grab it anywhere to move it */
+.stk { position: absolute; z-index: 3; touch-action: none; cursor: grab; outline: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.stk.drag { cursor: grabbing; z-index: 6; }
+.stk img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 6px 18px #2a2a2a33; pointer-events: none; -webkit-user-drag: none; }
+.stk.sel img, .stk:focus-visible img { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #7d766f, 0 10px 24px #2a2a2a40; }
+.stk .hd { position: absolute; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; background: var(--ink); color: #fff; padding: 0; display: none; place-items: center; cursor: pointer; font-size: 16px; line-height: 1; touch-action: none; box-shadow: 0 2px 6px #0004; }
+.stk .hd::after { content: ""; position: absolute; inset: -9px; } /* bigger hit area than it looks */
+.stk.sel .hd, .stk:focus-visible .hd { display: grid; }
+@media (hover: hover) { .stk:hover .hd { display: grid; } }
+.stk .rs { right: -11px; bottom: -11px; cursor: nwse-resize; }
+.stk .ro { left: -11px; bottom: -11px; cursor: grab; background: var(--y); border-color: var(--ink); color: var(--ink); }
+.stk .rm { right: -11px; top: -11px; background: #b74b45; }
+.stk .hd svg { width: 14px; height: 14px; pointer-events: none; }
+@media (pointer: coarse) {
+  .stk .hd { width: 34px; height: 34px; }
+  .stk .rs { right: -15px; bottom: -15px; }
+  .stk .ro { left: -15px; bottom: -15px; }
+  .stk .rm { right: -15px; top: -15px; }
+}
+.sheet.dropping { outline: 3px dashed #e7ce42; outline-offset: -6px; }

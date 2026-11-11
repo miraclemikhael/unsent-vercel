@@ -1,0 +1,87 @@
+/* Unsent · css/editor.css · the letter editor: extra text styles, picture fit controls, and the phone layout of the Write page.
+   Loaded last, so it can adjust style.css. */
+
+/* ---------- text styles from the toolbar ---------- */
+#ed .hd { font-family: Caveat, cursive; font-weight: 700; font-size: 34px; line-height: 1.15; color: var(--ink); }
+#ed .ta-l { text-align: left; }
+#ed .ta-c { text-align: center; }
+#ed .ta-r { text-align: right; }
+#ed ul, #ed ol { margin: 0; padding-left: 26px; }
+.ed .tb button[aria-pressed="true"] { background: var(--y); color: #292929; }
+.ed .tb button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.ed .tb { flex-wrap: wrap; height: auto; min-height: 54px; row-gap: 6px; padding-top: 8px; padding-bottom: 8px; }
+.ed .tb .tsel { max-width: 130px; }
+/* tools stay in reach while you write a long letter */
+.ed .tb { position: sticky; top: 0; z-index: 8; background: var(--card); }
+@media (max-width: 900px) { .ed .tb { top: calc(56px + env(safe-area-inset-top, 0px)); } }
+.ed { overflow: visible; }
+
+/* ---------- postcard picture: fit, zoom, position ---------- */
+.pfx { border: 1px solid var(--line); border-radius: 12px; margin: 0 0 14px; background: var(--card); }
+.pfx summary { display: flex; align-items: center; gap: 8px; padding: 11px 14px; font-size: 13px; font-weight: 600; cursor: pointer; list-style: none; }
+.pfx summary::-webkit-details-marker { display: none; }
+.pfx summary:focus-visible, .pfx button:focus-visible, .pfx input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.pfxb { display: flex; flex-direction: column; gap: 10px; padding: 2px 14px 14px; }
+.pfr { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 400; }
+.pfr > span { color: var(--mut); }
+.pfr output { min-width: 36px; text-align: right; font-variant-numeric: tabular-nums; color: var(--mut); font-size: 12px; }
+.pfx input[type="range"] { width: 100%; padding: 0; border: 0; background: none; height: 22px; accent-color: var(--ink); }
+.pfr .seg { grid-column: 2 / -1; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; width: fit-content; }
+.seg button { padding: 8px 13px; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 12.5px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--y); color: #292929; font-weight: 700; }
+.pfxb .btn { align-self: flex-start; }
+.pfxb .btn:disabled { opacity: .5; cursor: default; }
+
+/* ---------- Write page on phones and small tablets ---------- */
+@media (max-width: 760px) {
+  .top { flex-direction: column; align-items: stretch; gap: 14px; }
+  .top .acts { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .top .acts .btn { width: 100%; justify-content: center; padding: 12px 10px; font-size: 13px; }
+  .top .acts .btn:last-child { grid-column: 1 / -1; }
+
+  .card.ed { border-radius: 18px; padding: 0; }
+  .ed .eh { flex-wrap: wrap; padding: 14px 16px 10px; gap: 8px; }
+  .ed .eh .ehl { flex: 1 1 100%; min-width: 0; }
+  .ed .eh input#ttl { font-size: 20px; width: 100%; }
+  .ed .eh .ib-row { order: -1; margin-left: auto; display: flex; gap: 6px; }
+  .ed .eh .ib { width: 40px; height: 40px; }
+
+  /* toolbar and templates: one line you can swipe */
+  .ed .tb { flex-wrap: nowrap; padding: 6px 12px; gap: 4px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ed .tb::-webkit-scrollbar, .ed .tpl::-webkit-scrollbar { display: none; }
+  .ed .tb > * { flex: none; }
+  .ed .tb button { width: 40px; height: 40px; }
+  .ed .tb .dv { height: 24px; }
+  .ed .tb small { margin-left: 8px; white-space: nowrap; }
+  .ed .tpl { flex-wrap: nowrap; overflow-x: auto; padding: 10px 12px; scrollbar-width: none; }
+  .ed .tpl > * { flex: none; }
+  .ed .tpl button { padding: 9px 14px; }
+
+  /* the sheet uses the whole width; the margin labels go away */
+  .ed .sheet {
+    margin: 10px 10px 0; border-radius: 12px;
+    background: repeating-linear-gradient(#0000 0 31px, #8a6d3b1f 31px 32px), #fffdf7;
+    background-attachment: local;
+  }
+  html[data-eff="dark"] .ed .sheet { background: repeating-linear-gradient(#0000 0 31px, #ffffff12 31px 32px), #26222c; background-attachment: local; }
+  .ed .sheet .zl { display: none; }
+  .ed .sheet #ed { padding: 20px 16px 26px; min-height: 360px; font-size: 16px; }
+  #ed .script { font-size: 26px; }
+  #ed .script.sm { font-size: 23px; }
+  #ed .hd { font-size: 30px; }
+  .ed .ef { padding: 12px 16px; }
+
+  /* preview side */
+  .pvp { padding: 16px; }
+  .pcpick .pcchips { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  /* Unsent page: the four counters sit two by two */
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stats > * { min-width: 0; padding: 14px; }
+}
+@media (max-width: 420px) {
+  .pcpick .pcchips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pfr { grid-template-columns: 82px minmax(0, 1fr) auto; }
+}

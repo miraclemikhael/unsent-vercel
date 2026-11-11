@@ -1,0 +1,17 @@
+/* Unsent · css/splash.css · animated logo splash for phones and the installed app.
+   The logo video is ink on white, so it is blended onto the page color: light = multiply, dark = inverted + screen. */
+#spl { display: none; }
+html.spl #spl {
+  display: grid; place-items: center;
+  position: fixed; inset: 0; z-index: 3000;
+  background: var(--bg, #fcf7f4); isolation: isolate;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  transition: opacity .5s ease, visibility .5s; touch-action: none; -webkit-tap-highlight-color: transparent;
+}
+html.spl #spl.out { opacity: 0; visibility: hidden; pointer-events: none; }
+html.spl #spl video {
+  display: block; width: min(100vw, 640px); height: auto; max-height: 100%;
+  object-fit: contain; mix-blend-mode: multiply; pointer-events: none;
+}
+html[data-eff="dark"].spl #spl video { filter: invert(1); mix-blend-mode: screen; }
+html.spl body { overflow: hidden; }

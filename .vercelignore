@@ -1,0 +1,5 @@
+legacy-uploads
+tools
+.env
+.env.*
+DEPLOY.md

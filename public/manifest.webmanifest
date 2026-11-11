@@ -1,0 +1,45 @@
+{
+  "name": "Unsent",
+  "short_name": "Unsent",
+  "description": "A private space for your unsent thoughts.",
+  "start_url": "index.php?p=home&source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fcf7f4",
+  "theme_color": "#fcf7f4",
+  "icons": [
+    {
+      "src": "img/icon-splash-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "img/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Write",
+      "url": "index.php?p=write"
+    },
+    {
+      "name": "Mood",
+      "url": "index.php?p=mood"
+    }
+  ]
+}

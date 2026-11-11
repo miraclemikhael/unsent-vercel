@@ -1,0 +1,373 @@
+/* motion.css — calm 3D + motion layer for Unsent. Loaded AFTER style.css; remove the <link> to undo.
+   Rules of this file:
+   - nothing bounces, springs, tilts or loops. Things fade and lift a few pixels, once.
+   - one icon family everywhere: 1.8px rounded line icons (ic() in index.php)
+   - theme change = drip down (dark) / sucked up (light) */
+
+:root { --fx-ease: cubic-bezier(.22, .61, .36, 1); }
+
+.left { position: relative; isolation: isolate; overflow: hidden; }
+
+/* ---------- ONE ICON SET ---------- */
+svg[stroke="currentColor"] { stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ic svg, .ico svg, .sq svg { display: block; margin: auto; }
+.ico-line { display: inline-flex; align-items: center; gap: 6px; }
+:is(.note, .priv, .ok) > svg { vertical-align: -3px; margin-right: 7px; flex: none; }
+.btn svg, .lo svg, .back svg, .tabs a svg { flex: none; }
+.lo, .back { display: inline-flex; align-items: center; gap: 8px; }
+.tabs a > span { display: inline-flex; margin-left: auto; opacity: .6; }
+.steps i svg { display: block; }
+/* search box icon (placeholders cannot hold svg) */
+html body input.search {
+  padding-left: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8478' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: 14px 50%; background-size: 17px;
+}
+html[data-eff="dark"] body input.search {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a9a396' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+}
+
+/* ---------- calm down the older hover wiggles in style.css ---------- */
+.mo img { transition: transform .25s var(--fx-ease), filter .25s ease; }
+.mo.on img { transform: scale(1.04); filter: none; }
+.pc { transition: transform .4s var(--fx-ease); }
+@keyframes pop { 50% { transform: scale(1.04); } }
+@keyframes spin-in { from { transform: rotate(-35deg); opacity: 0; } }
+.seg button.on svg { animation: spin-in .4s var(--fx-ease) both; }
+
+/* cards: a soft shadow on hover, no movement */
+.card, .mood { transition: box-shadow .3s ease, background-color .45s ease, border-color .45s ease; }
+.hside > .card:hover, .stats > .card:hover, .sg > .sc:hover { box-shadow: 0 14px 28px -18px rgba(41, 41, 41, .3); }
+html[data-eff="dark"] :is(.hside > .card, .stats > .card, .sg > .sc):hover { box-shadow: 0 14px 28px -16px rgba(0, 0, 0, .7); }
+
+/* ---------- buttons: soft keycap depth, 1px press ---------- */
+.btn:not(.wh):not(.rd) { box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 1px 0 rgba(0,0,0,.25), 0 8px 14px -8px rgba(0,0,0,.35); }
+.btn:not(.wh):not(.rd):active { box-shadow: inset 0 1px 0 rgba(255,255,255,.1); }
+.btn.wh { box-shadow: 0 1px 0 var(--line), 0 6px 12px -8px rgba(0,0,0,.16); }
+.btn.wh:active { box-shadow: none; }
+.btn:active { translate: 0 1px; }
+.btn { transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease, translate .12s ease; }
+html[data-eff="dark"] .btn:not(.wh):not(.rd) { box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 1px 0 rgba(0,0,0,.5), 0 8px 14px -8px rgba(0,0,0,.55); }
+
+/* =====================================================================
+   MOTION: every kind of thing moves its own way. All one-shot, all eased, none bounce.
+     mask   : page titles (text slides up out of a clip)
+     rise   : cards, stats (fade + lift)
+     grow   : hero card, stat tiles, stage (fade + scale from 97%)
+     from-L / from-R : side panels, editor + preview, sidebars
+     wipe   : chart card (reveals left to right)
+     draw   : icons (strokes draw themselves)
+     fade   : buttons in headers, footers, table rows
+   ===================================================================== */
+@keyframes fx-rise  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes fx-grow  { from { opacity: 0; transform: scale(.972); } to { opacity: 1; transform: none; } }
+@keyframes fx-fade  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fx-from-l { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+@keyframes fx-from-r { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+@keyframes fx-mask  { from { clip-path: inset(0 0 100% 0); transform: translateY(14px); } to { clip-path: inset(-12% -3% -12% -3%); transform: none; } }
+@keyframes fx-wipe  { from { clip-path: inset(-40px 100% -40px -40px); opacity: .4; } to { clip-path: inset(-40px); opacity: 1; } }
+@keyframes fx-draw  { from { stroke-dasharray: 1; stroke-dashoffset: 1; } to { stroke-dasharray: 1; stroke-dashoffset: 0; } }
+@keyframes fx-hand  { from { opacity: 0; translate: 26px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes fx-menu  { from { opacity: 0; transform: translateY(6px) scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes fx-glow  { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 150, 60, 0); } 50% { box-shadow: 0 0 22px 2px rgba(255, 150, 60, .28); } }
+
+/* page titles + header actions */
+.top h1 { animation: fx-mask .7s var(--fx-ease) backwards; }
+.top p { animation: fx-rise .5s var(--fx-ease) .14s backwards; }
+.top > :last-child:not(div), .top .acts, .top .ahr, .atop { animation: fx-fade .5s ease .25s backwards; }
+
+/* home */
+.hmain > .mood { animation: fx-grow .65s var(--fx-ease) backwards; }
+.mood .reach { animation: fx-hand .8s var(--fx-ease) .25s backwards; }
+.hmain > .rl { animation: fx-rise .55s var(--fx-ease) .12s backwards; }
+.hside > * { animation: fx-from-r .6s var(--fx-ease) backwards; }
+.hside > :nth-child(2) { animation-delay: .08s; } .hside > :nth-child(3) { animation-delay: .16s; }
+
+/* unsent library */
+.stats > .card { animation: fx-rise .55s var(--fx-ease) backwards; }
+.stats > .card:nth-child(2) { animation-delay: .06s; } .stats > .card:nth-child(3) { animation-delay: .12s; } .stats > .card:nth-child(4) { animation-delay: .18s; }
+.lib > .list { animation: fx-rise .55s var(--fx-ease) .1s backwards; }
+.lib > .side { animation: fx-from-r .6s var(--fx-ease) .18s backwards; }
+.row { animation: fx-from-l .45s var(--fx-ease) backwards; }
+.row:nth-of-type(2) { animation-delay: .05s; } .row:nth-of-type(3) { animation-delay: .1s; }
+.row:nth-of-type(4) { animation-delay: .15s; } .row:nth-of-type(n+5) { animation-delay: .2s; }
+
+/* writing page */
+.egrid > :first-child { animation: fx-from-l .6s var(--fx-ease) backwards; }
+.egrid > :last-child { animation: fx-from-r .6s var(--fx-ease) .08s backwards; }
+.ed .tpl button { animation: fx-fade .4s ease backwards; }
+.ed .tpl button:nth-of-type(2) { animation-delay: .04s; } .ed .tpl button:nth-of-type(3) { animation-delay: .08s; } .ed .tpl button:nth-of-type(4) { animation-delay: .12s; }
+.ed .tpl button:nth-of-type(5) { animation-delay: .16s; } .ed .tpl button:nth-of-type(6) { animation-delay: .2s; } .ed .tpl button:nth-of-type(7) { animation-delay: .24s; }
+.stage { animation: fx-grow .65s var(--fx-ease) .15s backwards; }
+
+/* profile */
+.pgrid > .tabs { animation: fx-from-l .55s var(--fx-ease) backwards; }
+#ppanels { animation: fx-rise .55s var(--fx-ease) .1s backwards; }
+#ppanels > [data-p]:not([hidden]) { animation: fx-from-r .35s var(--fx-ease) backwards; }
+
+/* admin */
+.sg > .sc { animation: fx-grow .6s var(--fx-ease) backwards; }
+.sg > .sc:nth-child(2) { animation-delay: .07s; } .sg > .sc:nth-child(3) { animation-delay: .14s; } .sg > .sc:nth-child(4) { animation-delay: .21s; }
+.card.chart { animation: fx-wipe 1s var(--fx-ease) .25s backwards; }
+.ugrid > .um { animation: fx-rise .55s var(--fx-ease) .1s backwards; }
+.ugrid > .sum { animation: fx-from-r .6s var(--fx-ease) .18s backwards; }
+.at tbody tr { animation: fx-fade .45s ease backwards; }
+.at tbody tr:nth-child(2) { animation-delay: .04s; } .at tbody tr:nth-child(3) { animation-delay: .08s; } .at tbody tr:nth-child(4) { animation-delay: .12s; }
+.at tbody tr:nth-child(5) { animation-delay: .16s; } .at tbody tr:nth-child(n+6) { animation-delay: .2s; }
+.afoot, .green { animation: fx-fade .6s ease .3s backwards; }
+
+/* sidebar */
+.fx-first aside nav a { animation: fx-from-l .45s var(--fx-ease) backwards; }
+.fx-first aside nav a:nth-child(2) { animation-delay: .04s; } .fx-first aside nav a:nth-child(3) { animation-delay: .08s; }
+.fx-first aside nav a:nth-child(4) { animation-delay: .12s; } .fx-first aside nav a:nth-child(5) { animation-delay: .16s; }
+/* (the hover underline was drawn through the label like a strikethrough: removed, hover tint comes from style.css) */
+
+/* sign-in / recover */
+.left .tl > * { animation: fx-rise .55s var(--fx-ease) backwards; }
+.left .tl > :nth-child(2) { animation-delay: .08s; } .left .tl > :nth-child(3) { animation-delay: .16s; }
+.left .art { animation: fx-grow .9s var(--fx-ease) .2s backwards; }
+.box { animation: fx-from-r .6s var(--fx-ease) .05s backwards; }
+
+/* mood faces + week dots: plain ordered fade */
+.mpick .mo, .week .wd { animation: fx-rise .4s var(--fx-ease) backwards; }
+.mpick .mo:nth-child(2), .week .wd:nth-child(2) { animation-delay: .04s; }
+.mpick .mo:nth-child(3), .week .wd:nth-child(3) { animation-delay: .08s; }
+.mpick .mo:nth-child(4), .week .wd:nth-child(4) { animation-delay: .12s; }
+.mpick .mo:nth-child(5), .week .wd:nth-child(5) { animation-delay: .16s; }
+.week .wd:nth-child(6) { animation-delay: .2s; } .week .wd:nth-child(7) { animation-delay: .24s; }
+
+/* popups */
+.menu:not([hidden]) { animation: fx-menu .22s var(--fx-ease); transform-origin: 0 100%; }
+.modal:not([hidden]) { animation: fx-fade .3s ease; }
+.modal:not([hidden]) .stage { animation: fx-grow .4s var(--fx-ease); }
+.swal2-popup.swal2-show { animation: fx-grow .3s var(--fx-ease) !important; }
+
+/* streak flame: slow warm glow, no movement */
+.ic.hot { animation: fx-glow 5s ease-in-out infinite; }
+
+/* icons draw themselves (JS tags the strokes with pathLength=1) */
+.fx-d { animation: fx-draw .9s var(--fx-ease) calc(.2s + var(--di, 0) * .07s) backwards; }
+
+/* inputs: soft focus */
+:is(input, select, textarea) { transition: border-color .25s ease, box-shadow .25s ease, background-color .45s ease, color .45s ease; }
+
+/* scroll reveal for things below the fold (JS sets data-rv, then removes it when done) */
+[data-rv] { opacity: 0; transition: opacity .65s var(--fx-ease), transform .65s var(--fx-ease), clip-path .9s var(--fx-ease); }
+[data-rv="rise"] { transform: translateY(20px); }
+[data-rv="left"] { transform: translateX(-18px); }
+[data-rv="right"] { transform: translateX(18px); }
+[data-rv="grow"] { transform: scale(.97); }
+[data-rv="wipe"] { clip-path: inset(-40px 100% -40px -40px); }
+[data-rv].rv-in { opacity: 1; transform: none; }
+[data-rv="wipe"].rv-in { clip-path: inset(-40px); }
+
+/* ---------- theme change: drip down to go dark, sucked up to go light (see swapTheme in app.js) ---------- */
+/* no colour fades while the page swaps, or the new layer is captured half-way between old and new colours */
+html.theming *, html.theming *::before, html.theming *::after { transition: none !important; }
+html.theming::view-transition-old(root),
+html.theming::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+html.theming::view-transition-old(root) { z-index: 1; }
+html.theming::view-transition-new(root) { z-index: 2; }
+/* going dark: new layer starts fully clipped, so it can never flash black before the drip starts */
+html.theming:not(.rising)::view-transition-new(root) { clip-path: inset(0 0 100% 0); }
+/* going light: the dark layer stays on top and is pulled up */
+html.theming.rising::view-transition-old(root) { z-index: 3; }
+html.theming.rising::view-transition-new(root) { z-index: 1; }
+html.theme-fade, html.theme-fade * {
+  transition: background-color .6s ease, color .6s ease, border-color .6s ease, fill .6s ease, stroke .6s ease, box-shadow .6s ease !important;
+}
+
+/* ---------- stillness ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .ic.hot { animation: none !important; }
+}
+html[data-calm] *, .calm * { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
+html[data-calm] .ic.hot, .calm .ic.hot { animation: none !important; }
+.calm .btn:active { translate: none; }
+
+/* ---------- writing templates: calm chips + sheet that matches the dark card ---------- */
+.ed .tpl button:hover { translate: none; }
+.ed .tpl button:active { translate: 0 1px; }
+.ed .tpl .ico-line { color: var(--mut); }
+.ed .sheet { transition: background-color .45s ease, border-color .45s ease; }
+
+/* ---------- dark fixes ---------- */
+
+/* ---------- hover: nothing moves. Hover = colour, tint, soft ring, deeper shadow ---------- */
+/* kill every hover lift / shift / tilt / scale (style.css + the html.fx layer) */
+:is(.pc:not(.fx-turning), .mo img, .row, a.row, .tabs a, nav a, aside nav a, aside nav a svg, .btn, .fx-top, .fx-t, .chip, .wd, a > .logo, .ed .tpl button):is(:hover, :focus-visible) {
+  translate: none !important; rotate: none !important; scale: none !important;
+}
+:is(.row, a.row, .tabs a, nav a, .btn, .mo img):is(:hover, :focus-visible) { transform: none !important; }
+.pc:hover { transform: rotate(-1.1deg) !important; }       /* keep its resting tilt, no change */
+
+/* swapped in: */
+.btn:not(:disabled):hover { filter: brightness(1.08); }
+html[data-eff="dark"] .btn:not(:disabled):hover { filter: brightness(1.14); }
+.btn:focus-visible { outline: 2px solid #e8c93f; outline-offset: 2px; }
+
+.row:hover:not(.on), a.row:hover { background-color: color-mix(in srgb, #ffec85 22%, var(--card, #fff)); }
+html[data-eff="dark"] .row:hover:not(.on), html[data-eff="dark"] a.row:hover { background-color: color-mix(in srgb, #ffec85 9%, var(--card, #221f27)); }
+
+.mo:hover img { filter: drop-shadow(0 3px 0 rgba(0, 0, 0, .16)); }
+.mo.on:hover img { filter: none; }
+
+
+.chip:hover:not(.on) { background-color: #fff7c2; border-color: #e9d55a; }
+html[data-eff="dark"] .chip:hover:not(.on) { background-color: #ffec8524; border-color: #e8c93f88; }
+
+.week .wd:hover, .week .wd:focus-visible { box-shadow: none; outline: none; }
+.week .wd:hover:not(.td) span { box-shadow: 0 0 0 2px #ffec8566; }
+
+.tabs a:hover:not(.on) { background-color: #ffffff80; }
+html[data-eff="dark"] .tabs a:hover:not(.on) { background-color: #ffffff12; }
+aside nav a:hover:not(.on) svg { color: #e8a800; }
+html[data-eff="dark"] aside nav a:hover:not(.on) svg { color: #ffec85; }
+/* active item is yellow: its icon must stay dark, hovered or not */
+aside nav a.on svg, aside nav a.on:hover svg, html[data-eff="dark"] aside nav a.on svg, html[data-eff="dark"] aside nav a.on:hover svg { color: #292929; }
+
+/* ---------- smaller hover glow (was a 420px yellow wash) ---------- */
+html body .fx-t.tilt::after { background: radial-gradient(130px circle at var(--mx, 50%) var(--my, 0%), #ffffff2e, #0000 70%); }
+html[data-eff="dark"] body .fx-t.tilt::after { background: radial-gradient(130px circle at var(--mx, 50%) var(--my, 0%), #ffec8514, #0000 70%); }
+
+/* ---------- postcard: real 3D turn ----------
+   perspective on the card, both faces always drawn, back face hidden by the browser.
+   app.js only toggles .flipped (+ .fx-turning for 1s). */
+.pc { perspective: 1500px; }
+.pc-inner {
+  transform-style: preserve-3d !important;
+  transition: transform 1s cubic-bezier(.5, .05, .2, 1) !important;
+  will-change: transform;
+}
+.pc-face { display: block !important; backface-visibility: hidden !important; -webkit-backface-visibility: hidden !important; }
+.pc-back  { transform: rotateY(0deg) !important; }
+.pc-front { transform: rotateY(180deg) !important; }
+.pc:not(.flipped) .pc-inner { transform: rotateY(0deg) !important; }
+.pc.flipped .pc-inner { transform: rotateY(180deg) !important; }
+/* the card lifts toward you mid-turn, shadow stretches, then it settles */
+@keyframes fx-lift   { 0%, 100% { translate: 0 0; scale: 1; } 45% { translate: 0 -10px; scale: 1.045; } }
+@keyframes fx-shade  { 0%, 100% { box-shadow: 0 14px 30px rgba(41, 41, 41, .25); } 45% { box-shadow: 0 42px 64px -8px rgba(41, 41, 41, .42); } }
+.pc.fx-turning { animation: fx-lift 1s cubic-bezier(.45, .05, .25, 1); }
+.pc.fx-turning .pc-face { animation: fx-shade 1s cubic-bezier(.45, .05, .25, 1); }
+html[data-eff="dark"] .pc.fx-turning .pc-face { animation-name: fx-shade-dk; }
+@keyframes fx-shade-dk { 0%, 100% { box-shadow: 0 14px 30px rgba(0, 0, 0, .5); } 45% { box-shadow: 0 42px 64px -8px rgba(0, 0, 0, .7); } }
+/* soft light sweep across the face while it turns */
+.pc-face::before { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0;
+  background: linear-gradient(105deg, #0000 30%, #ffffff55 50%, #0000 70%); }
+.pc.fx-turning .pc-face::before { animation: fx-sheen 1s ease-in-out; }
+@keyframes fx-sheen { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+/* ---------- postcard caption: colour comes from the picture (set by capTint in motion.js) ---------- */
+.pc .pc-cap {
+  background: var(--cap-bg, rgba(255, 255, 255, .93));
+  color: var(--cap-ink, #2a2a2a);
+  box-shadow: 0 0 0 1px var(--cap-edge, transparent), 0 3px 10px rgba(0, 0, 0, .2);
+  transition: background-color .4s ease, color .4s ease;
+}
+
+/* ---------- no scroll-progress line at the top ---------- */
+.fx-bar { display: none !important; }
+
+/* =====================================================================
+   POLISH (v4)
+   ===================================================================== */
+/* things the old enhancement layer used to switch on, now plain and always on */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html[data-calm] { scroll-behavior: auto; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+:is(.streak, .stats big, .sc big, .num big) { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2.5px solid #e9b82f; outline-offset: 3px; }
+html[data-eff="dark"] :focus-visible { outline-color: var(--y); }
+:is(input, textarea, select):focus-visible { outline: none; }
+:is(input, textarea, select):focus { border-color: #e8c93f; box-shadow: 0 0 0 3px #ffec8566; }
+html[data-eff="dark"] :is(input, textarea, select):focus { box-shadow: 0 0 0 3px #ffec8528; }
+::selection { background: #ffec85; color: #292929; }
+h1, h2, .top p { text-wrap: balance; }
+
+/* skip link */
+.skip { position: fixed; left: 12px; top: 8px; z-index: 100; padding: 10px 16px; border-radius: 12px; background: var(--ink); color: var(--bg);
+  font-weight: 600; text-decoration: none; transform: translateY(-160%); transition: transform .2s var(--fx-ease); }
+.skip:focus { transform: none; }
+main:focus { outline: none; }
+
+/* password strength */
+.pwm { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-weight: 400; }
+.pwm i { flex: 1; height: 5px; border-radius: 99px; background: var(--line); position: relative; overflow: hidden; }
+.pwm i::after { content: ""; position: absolute; inset: 0; width: calc(var(--s, 0) * 25%); background: var(--c, #d9776d); border-radius: inherit;
+  transition: width .35s var(--fx-ease), background-color .35s ease; }
+.pwm small { font-size: 12px; color: var(--mut); text-align: right; }
+
+/* library: empty search */
+.nores { text-align: center; padding: 28px 12px; font-size: 14px; }
+
+/* back to top: same hover rule as everything else (no scale) */
+.fx-top:hover { scale: none; filter: brightness(1.08); }
+
+/* touch: 44px targets for the small icon buttons */
+@media (pointer: coarse) {
+  .ib, .sq, .tb button { min-width: 44px; min-height: 44px; }
+  .btn.sm { min-height: 40px; }
+}
+
+/* writing page: a blank sheet should look inviting */
+#ttl::placeholder, #to::placeholder { color: var(--mut); opacity: .65; }
+
+/* calm mode also stops the slow glow */
+html[data-calm] .ic.hot, .calm .ic.hot { animation: none !important; }
+
+/* thin, quiet scrollbars */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--mut) 45%, transparent) transparent; }
+
+/* print: just the letter text */
+@media print { aside, .fx-top, .skip, .acts, .tb, .tpl { display: none !important; } }
+
+/* filter chips on Unsent had no text colour (white on white) */
+.chip { color: var(--ink); }
+.chip.on { color: #292929; }
+
+/* native controls follow the app theme, not the OS (OS dark + app light made button text white) */
+html[data-eff="light"] { color-scheme: light; }
+html[data-eff="dark"] { color-scheme: dark; }
+.sq, .ib, .chip { color: var(--ink); }
+
+/* title + "To" field: the generic input focus ring drew a box outside the borderless fields */
+#ttl:focus, .chipto input:focus { box-shadow: none; border-color: transparent; }
+#ttl:focus-visible { outline: none; }
+#ttl:focus { background: color-mix(in srgb, #ffec85 14%, transparent); border-radius: 10px; }
+.chipto { transition: border-color .25s ease, box-shadow .25s ease; }
+.chipto:focus-within { border-color: #e8c93f; box-shadow: 0 0 0 3px #ffec8566; }
+html[data-eff="dark"] .chipto:focus-within { box-shadow: 0 0 0 3px #ffec8528; }
+/* selected letter row: a quiet tint, not a thick yellow frame */
+.row.on { border: 1px solid color-mix(in srgb, #e7ce42 55%, var(--line)); box-shadow: none; background-color: color-mix(in srgb, #ffec85 16%, var(--card, #fff)); }
+html[data-eff="dark"] .row.on { border-color: #e7ce4255; box-shadow: none; background-color: #ffec850f; }
+.row:focus-visible { outline: 2px solid #e7ce4299; outline-offset: -2px; }
+.row.on:focus-visible { outline: none; }
+
+/* clear hover on letter rows (and the other pick-one chips) */
+.row { cursor: pointer; transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.row:hover:not(.on), a.row:hover { background-color: color-mix(in srgb, #ffec85 32%, var(--card, #fff)); border-color: #e8c93f; box-shadow: 0 0 0 3px #ffec8545; }
+html[data-eff="dark"] .row:hover:not(.on), html[data-eff="dark"] a.row:hover { background-color: #ffec851c; border-color: #e8c93fcc; box-shadow: 0 0 0 3px #ffec8516; }
+.row.on:hover { border-color: #e7ce42; }
+.pt { cursor: pointer; transition: border-color .2s ease, background-color .2s ease; }
+.pt:hover:not(.on) { border-color: #e8c93f; }
+.ed .tpl button:hover { border-color: #e8c93f; background-color: color-mix(in srgb, #ffec85 24%, transparent); }
+
+/* ---------- daily check-in card: lifts and comes alive on hover ---------- */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .mood { transition: transform .45s cubic-bezier(.2, .9, .3, 1.2), box-shadow .45s ease, background-color .45s ease, border-color .45s ease; will-change: transform; }
+  .mood:hover { transform: translateY(-6px) rotate(-.4deg); box-shadow: 0 22px 44px -14px #f5c40080, 0 8px 18px #00000026; }
+  .mood .eyebrow svg { transition: transform .6s cubic-bezier(.2, .9, .3, 1.3); }
+  .mood:hover .eyebrow svg { transform: rotate(180deg) scale(1.25); }
+  .mood .mo { transition: transform .3s cubic-bezier(.2, .9, .3, 1.5); }
+  .mood:hover .mo { animation: mood-bob 1.6s ease-in-out infinite; }
+  .mood:hover .mo:nth-child(2) { animation-delay: .12s; }
+  .mood:hover .mo:nth-child(3) { animation-delay: .24s; }
+  .mood:hover .mo:nth-child(4) { animation-delay: .36s; }
+  .mood:hover .mo:nth-child(5) { animation-delay: .48s; }
+  .mood .mo:hover { animation: none; transform: scale(1.22) rotate(-6deg); }
+  .mood .mlog:not(:disabled):hover { transform: translateY(-2px) scale(1.04); }
+  .mood .gin:focus-within { transform: scale(1.015); transition: transform .25s ease; }
+}
+@keyframes mood-bob { 50% { transform: translateY(-5px); } }

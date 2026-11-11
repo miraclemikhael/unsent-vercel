@@ -1,0 +1,133 @@
+/* Unsent · css/dark.css · dark mode, rebuilt. Loaded LAST (after phone.css).
+   Warm charcoal like the brand (cream + yellow), real elevation steps, no glaring pastel blocks.
+   Every rule starts with  html[data-eff="dark"]:not(#_)  so it beats the older dark rules cleanly. */
+
+html[data-eff="dark"] {
+  color-scheme: dark;
+  --bg: #131211;      /* page */
+  --side: #1a1917;    /* top bar + tab bar */
+  --card: #1f1d1b;    /* cards */
+  --wh: #262321;      /* raised: buttons, chips, menus */
+  --inset: #171615;   /* inputs sit slightly BELOW the card */
+  --ink: #f4efe9;
+  --mut: #aaa29a;
+  --line: #36322f;
+  --y: #ffec85;
+  --tint-rose: #4a2b2d;   --on-rose: #ffd0cb;
+  --tint-sage: #283a24;   --on-sage: #d3ebbb;
+  --tint-gold: #46401f;   --on-gold: #f6e7a6;
+  --tint-sky:  #22364a;   --on-sky:  #cbe5fb;
+}
+
+/* ---------- page + surfaces ---------- */
+html[data-eff="dark"]:not(#_) body { background: var(--bg); color: var(--ink); }
+html[data-eff="dark"]:not(#_) :is(.card, .menu, .dr, .srch, .sel, .quote) { background: var(--card); color: var(--ink); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) .card { box-shadow: none; }
+html[data-eff="dark"]:not(#_) :is(.beige, .right, .or span) { background: var(--side); color: var(--ink); }
+html[data-eff="dark"]:not(#_) :is(.btn.wh, .chip, .mo, .ib, .sq, .priv, .pt, .chipto, .tabs a.on, .thm span, .mj-nav, .lo-o, .ed .tb .sel, .ed .tb .tsel, .fmtrow select) {
+  background: var(--wh); color: var(--ink); border-color: var(--line);
+}
+html[data-eff="dark"]:not(#_) :is(input, select:not(.tag), textarea) { background-color: var(--inset); color: var(--ink); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) :is(input, textarea)::placeholder { color: #7d756e; opacity: 1; }
+html[data-eff="dark"]:not(#_) :is(input, select, textarea):focus { border-color: #e8c93f; box-shadow: 0 0 0 3px #ffec8530; }
+html[data-eff="dark"]:not(#_) .dark { background: var(--wh); color: var(--ink); }
+html[data-eff="dark"]:not(#_) .danger { background: #2e1f1f; border-color: #5a3434; color: var(--ink); }
+html[data-eff="dark"]:not(#_) .ic { background: var(--wh); color: var(--ink); }
+html[data-eff="dark"]:not(#_) .ic.hot { background: var(--tint-rose); color: var(--on-rose); }
+html[data-eff="dark"]:not(#_) :is(.sc.hl, .at tbody tr.on) { background: #2c2819; }
+html[data-eff="dark"]:not(#_) ::selection { background: #ffec85; color: #1a1816; }
+html[data-eff="dark"]:not(#_) * { scrollbar-color: #3d3935 transparent; }
+
+/* ---------- top bar + tab bar (default; the Me page overrides with the vibe) ---------- */
+html[data-eff="dark"]:not(#_) aside { background: var(--bar-bg); border-color: var(--bar-line); }
+html[data-eff="dark"]:not(#_) aside nav { box-shadow: 0 -10px 28px -14px rgba(0, 0, 0, .75); }
+html[data-eff="dark"]:not(#_) aside nav a:not(.on) { color: var(--ink); }
+html[data-eff="dark"]:not(#_) :is(.art, .logo, .slogo) { filter: invert(1) hue-rotate(180deg) brightness(1.05); }
+html[data-eff="dark"]:not(#_) .left.yel .slogo { filter: none; }
+
+/* ---------- soft tinted chips instead of bright pastel blocks ---------- */
+html[data-eff="dark"]:not(#_) :is(.tag, .row .tag, select.tag) { background: var(--tint-rose); color: var(--on-rose); }
+html[data-eff="dark"]:not(#_) :is(.tag.past, .row .tag.past) { background: var(--tint-sage); color: var(--on-sage); }
+html[data-eff="dark"]:not(#_) :is(.tag.myself, .row .tag.myself) { background: var(--tint-gold); color: var(--on-gold); }
+html[data-eff="dark"]:not(#_) :is(.tag.other, .row .tag.other) { background: var(--tint-sky); color: var(--on-sky); }
+html[data-eff="dark"]:not(#_) :is(.green, .ok, .st.ok) { background: var(--tint-sage); color: var(--on-sage); --ink: var(--on-sage); --mut: #a9c395; }
+html[data-eff="dark"]:not(#_) :is(.green, .ok) b { color: var(--on-sage); }
+html[data-eff="dark"]:not(#_) .st.no { background: var(--tint-rose); color: var(--on-rose); }
+html[data-eff="dark"]:not(#_) .btn.rd { background: var(--tint-rose); color: var(--on-rose); }
+html[data-eff="dark"]:not(#_) .btn:not(.wh):not(.rd) { background: #f4efe9; color: #1a1816; }
+html[data-eff="dark"]:not(#_) .btn:not(.wh):not(.rd):hover { background: #fff; }
+
+/* ---------- yellow accent: keep, but only where it is a real "selected" state ---------- */
+html[data-eff="dark"]:not(#_):not(#__) :is(.chip.on, .mo.on, .pt.on, .choice.on, .week span.on, .thm input:checked + span) { background: #ffec85; color: #292929; border-color: #e8c93f; }
+html[data-eff="dark"]:not(#_):not(#__) :is(.ed .tb button[aria-pressed="true"], .seg button[aria-pressed="true"]) { background: #ffec85; color: #292929; }
+html[data-eff="dark"]:not(#_) .choice:not(.on) span { background: var(--wh); color: var(--ink); }
+html[data-eff="dark"]:not(#_) .dots span { background: #3f3b37; }
+html[data-eff="dark"]:not(#_):not(#__) .dots .on { background: #ffec85; }
+html[data-eff="dark"]:not(#_) .sw i { background: #4a4541; }
+html[data-eff="dark"]:not(#_) .sw i:after { background: #f4efe9; }
+html[data-eff="dark"]:not(#_) .sw input:checked + i { background: #e7ce42; }
+html[data-eff="dark"]:not(#_) .sw input:checked + i:after { background: #292929; }
+
+/* ---------- letter list ---------- */
+html[data-eff="dark"]:not(#_) .row { background: var(--card); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) :is(.row b, .row .to, .row .ex, .row .dt) { color: var(--ink); }
+html[data-eff="dark"]:not(#_) .row .ex, html[data-eff="dark"]:not(#_) .row .to { color: var(--mut); }
+html[data-eff="dark"]:not(#_) .row img:not(.pcthumb) { background: var(--wh); }
+html[data-eff="dark"]:not(#_) .row .rmail { background: var(--wh); color: var(--ink); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) :is(.row:hover:not(.on), a.row:hover) { background: color-mix(in srgb, #ffec85 8%, var(--card)); }
+html[data-eff="dark"]:not(#_) .row.on { background: color-mix(in srgb, #ffec85 14%, var(--card)); }
+
+/* ---------- editor ---------- */
+html[data-eff="dark"]:not(#_) .ed .eh, html[data-eff="dark"]:not(#_) .ed .ef { border-color: var(--line); }
+html[data-eff="dark"]:not(#_) .ed .tb { background: var(--card); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) .ed .tb button:hover { background: #ffffff14; }
+html[data-eff="dark"]:not(#_) .ed .tpl button { background: var(--wh); color: var(--ink); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) .ed .sheet {
+  background: repeating-linear-gradient(#0000 0 31px, #ffffff0f 31px 32px), #1c1a18;
+  background-attachment: local; border-color: var(--line);
+}
+html[data-eff="dark"]:not(#_) #ed { color: #e9e1d8; caret-color: #ffec85; }
+html[data-eff="dark"]:not(#_) #ed .hd { color: #f4efe9; }
+html[data-eff="dark"]:not(#_) .chipto { background: #3a3520; border-color: #6b5f26; color: #f6e7a6; }
+html[data-eff="dark"]:not(#_) .chipto input { color: #f6e7a6; background: none; }
+html[data-eff="dark"]:not(#_) .chipto em { color: #cdbf7a; }
+
+/* ---------- mood + friends + home ---------- */
+html[data-eff="dark"]:not(#_) .mj-d { background: var(--wh); border-color: var(--line); color: var(--ink); }
+html[data-eff="dark"]:not(#_) .mj-d i { color: var(--mut); }
+html[data-eff="dark"]:not(#_) .mj-d.has { background: color-mix(in srgb, var(--mc, #ffee83) 30%, var(--card)); }
+html[data-eff="dark"]:not(#_) .mj-d.td { border-color: #ffec85; }
+html[data-eff="dark"]:not(#_) .mj-hero, html[data-eff="dark"]:not(#_) .fhero { background: linear-gradient(135deg, #3b3519, #2a2616 70%); color: var(--ink); }
+html[data-eff="dark"]:not(#_) :is(.mj-hero, .fhero) .mut { color: #d8cfa0; }
+html[data-eff="dark"]:not(#_) .week .wd span.log { background: #2c2819; color: var(--ink); }
+html[data-eff="dark"]:not(#_) .m-okay, html[data-eff="dark"]:not(#_) .m-good, html[data-eff="dark"]:not(#_) .m-bright { color: #292929; }
+html[data-eff="dark"]:not(#_) .bub.them { background: var(--wh); color: var(--ink); }
+html[data-eff="dark"]:not(#_) .compose textarea { background-color: var(--inset); color: var(--ink); }
+html[data-eff="dark"]:not(#_) .stage { background: radial-gradient(120% 90% at 50% 0, #2a2723, #151412); }
+
+/* ---------- popups ---------- */
+html[data-eff="dark"]:not(#_) .swal2-popup { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
+html[data-eff="dark"]:not(#_) :is(.swal2-title, .swal2-html-container) { color: var(--ink); }
+html[data-eff="dark"]:not(#_) .swal2-popup .swal2-input { background-color: var(--inset); color: var(--ink); border-color: var(--line); }
+html[data-eff="dark"]:not(#_) .swal2-styled.swal2-cancel { background: var(--wh) !important; color: var(--ink) !important; }
+html[data-eff="dark"]:not(#_) .lo-w p, html[data-eff="dark"]:not(#_) .lo-f span { color: var(--mut); }
+
+/* ==========================================================================
+   Me page in dark theme: the chosen VIBE wins (page + cards + buttons + inputs)
+   ========================================================================== */
+html[data-eff="dark"]:not(#_) body:has(.spw) { background: var(--sbg); color: var(--sink); }
+html[data-eff="dark"]:not(#_) .spw .card { background: var(--scard); color: var(--sink); border-color: color-mix(in srgb, var(--sink) 14%, transparent); }
+html[data-eff="dark"]:not(#_) .spw .btn { background: var(--sa); color: var(--son); }
+html[data-eff="dark"]:not(#_) .spw .btn.wh { background: transparent; color: var(--sink); border-color: color-mix(in srgb, var(--sink) 28%, transparent); }
+html[data-eff="dark"]:not(#_) .spw input:not([type=checkbox]):not([type=color]) { background-color: transparent; color: var(--sink); border-color: color-mix(in srgb, var(--sink) 24%, transparent); }
+html[data-eff="dark"]:not(#_) .spw .sw i { background: color-mix(in srgb, var(--sink) 30%, transparent); }
+html[data-eff="dark"]:not(#_) .spw .sw input:checked + i { background: var(--sa); }
+html[data-eff="dark"]:not(#_) .spw .sw i:after { background: #fff; }
+html[data-eff="dark"]:not(#_) .spw .sw input:checked + i:after { background: var(--son); }
+html[data-eff="dark"]:not(#_) .spw .sp-stats div { background: var(--scard); color: var(--sink); border-color: color-mix(in srgb, var(--sink) 14%, transparent); }
+html[data-eff="dark"]:not(#_) .spw .sp-today { color: var(--sink); }
+html[data-eff="dark"]:not(#_) .spw :is(.mut, small) { color: var(--sink); }
+html[data-eff="dark"]:not(#_) .spw .sp-v i { border-color: color-mix(in srgb, var(--sink) 25%, transparent); }
+html[data-eff="dark"]:not(#_) .spw .sp-v.on i { border-color: var(--sa); }
+html[data-eff="dark"]:not(#_) .spw .sp-pill { color: var(--sink); }
+html[data-eff="dark"]:not(#_) .spw .sp-pill.pub { background: var(--sa); color: var(--son); }

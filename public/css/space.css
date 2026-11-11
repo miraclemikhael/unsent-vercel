@@ -1,0 +1,131 @@
+/* Unsent · css/space.css · "Me" page: sticky-note look, color wheel panel, dark theme that follows the chosen vibe,
+   and the Save button at the bottom of Settings. Loaded LAST (after final.css), so it wins over the older rules. */
+
+/* ---------- 1. light / dark colours of the chosen vibe ----------
+   space_vars() (php) and js/space.js set  --sbg-l / --sbg-d  (page), --sink-l / --sink-d  (text), --scard-l / --scard-d  (cards).
+   Light theme uses the -l set. Dark theme uses the -d set: a light vibe turns into a dark version of itself, a dark vibe stays. */
+html:has(.spw) { --sbg: var(--sbg-l, #fff6e6); --sink: var(--sink-l, #2a2a2a); --scard: var(--scard-l, #fff); --slogo: var(--slogo-l, none); }
+html[data-eff="dark"]:has(.spw) { --sbg: var(--sbg-d, #27221d); --sink: var(--sink-d, #f4efe9); --scard: var(--scard-d, #332e29); --slogo: invert(1); }
+html[data-eff="dark"]:has(.spw) { color-scheme: dark; }
+html[data-eff="dark"]:not(#_):not(#__) .spw ::placeholder { color: color-mix(in srgb, var(--sink) 52%, transparent); opacity: 1; }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-bio { color: var(--sink); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-banner:not(.has)::after { opacity: .25; }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-go { background: color-mix(in srgb, var(--sink) 14%, transparent); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-hero { border-bottom-color: var(--sa) !important; }
+html[data-eff="dark"]:not(#_):not(#__) .sp-hero .av-w .av, html[data-eff="dark"]:not(#_):not(#__) .av-w .av { box-shadow: 0 0 0 5px var(--scard) !important; }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-today { background: color-mix(in srgb, var(--mc, #ffee83) 22%, var(--scard)); border-color: color-mix(in srgb, var(--mc, #ffee83) 45%, transparent); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-c.on { border-color: var(--scard); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-custom { color: #2a2a2a; }
+
+/* ---------- 2. sticky-note colours ---------- */
+:root:not(#_):not(#__) .spw { --n1: #fff3a3; --n2: #ffc9d6; --n3: #c9efc8; --n4: #bfe3ff; --n5: #ffd9b0; --n6: #e2d0ff; --nink: #3a3226; --tape: rgba(255, 255, 255, .6); --pen: Kalam, "Segoe Print", cursive; --marker: Caveat, "Segoe Print", cursive; }
+html[data-eff="dark"]:not(#_):not(#__) .spw { --n1: #5b5121; --n2: #5d3040; --n3: #31503a; --n4: #28496a; --n5: #603f22; --n6: #46346a; --nink: #f7f0e4; --tape: rgba(255, 255, 255, .16); }
+
+/* handwriting headings */
+:root:not(#_):not(#__) .spw h3.hand { font-family: var(--marker); font-size: 31px; font-weight: 700; font-style: normal; line-height: 1.05; letter-spacing: 0; margin: 0; }
+:root:not(#_):not(#__) #spcount { font-family: var(--marker); font-size: 20px; font-weight: 700; opacity: .85; }
+:root:not(#_):not(#__) .sp-id h1 { font-family: var(--marker); font-size: 40px; font-weight: 700; letter-spacing: 0; line-height: 1; }
+
+/* ---------- 3. stats = four little notes ---------- */
+:root:not(#_):not(#__) .sp-stats { gap: 12px; padding: 10px 2px 4px; perspective: 900px; }
+:root:not(#_):not(#__) .sp-stats div { --r: -2deg; position: relative; background: var(--n1); color: var(--nink); border: 0; border-radius: 3px; padding: 20px 4px 11px; font-family: var(--pen); box-shadow: 0 1px 1px rgba(0, 0, 0, .12), 0 9px 14px -7px rgba(0, 0, 0, .35); transform: rotate(var(--r)) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform .22s ease, box-shadow .22s ease; }
+:root:not(#_):not(#__) .sp-stats div:nth-child(2) { --r: 1.6deg; background: var(--n2); }
+:root:not(#_):not(#__) .sp-stats div:nth-child(3) { --r: -1deg; background: var(--n3); }
+:root:not(#_):not(#__) .sp-stats div:nth-child(4) { --r: 2.2deg; background: var(--n4); }
+:root:not(#_):not(#__) .sp-stats div::before { content: ""; position: absolute; top: -8px; left: calc(50% - 24px); width: 48px; height: 16px; background: var(--tape); transform: rotate(-3deg); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); pointer-events: none; }
+:root:not(#_):not(#__) .sp-stats div:nth-child(even)::before { transform: rotate(3deg); }
+:root:not(#_):not(#__) .sp-stats b { font-family: var(--marker); font-size: 40px; font-weight: 700; line-height: .9; color: inherit; }
+:root:not(#_):not(#__) .sp-stats small { font-family: var(--pen); font-size: 12.5px; color: inherit; opacity: .82; }
+:root:not(#_):not(#__) .sp-stats div:hover { transform: translateY(-4px) rotate(0deg) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); box-shadow: 0 2px 2px rgba(0, 0, 0, .1), 0 16px 22px -8px rgba(0, 0, 0, .4); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-stats div { background: var(--n1); color: var(--nink); border: 0; }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-stats div:nth-child(2) { background: var(--n2); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-stats div:nth-child(3) { background: var(--n3); }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-stats div:nth-child(4) { background: var(--n4); }
+
+/* ---------- 4. letters = real postcards pinned to a board ---------- */
+:root:not(#_):not(#__) #view { overflow: visible; }
+:root:not(#_):not(#__) .sp-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 38px 24px; padding: 26px 4px 10px; perspective: 1200px; }
+:root:not(#_):not(#__) .sp-l { --r: -1.2deg; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "k k" "t t" "st sw"; align-items: center; gap: 12px 8px; margin: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--sink); box-shadow: none; transform: rotate(var(--r)) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform .25s ease; }
+:root:not(#_):not(#__) .sp-l:nth-child(4n+2) { --r: .9deg; }
+:root:not(#_):not(#__) .sp-l:nth-child(4n+3) { --r: -.6deg; }
+:root:not(#_):not(#__) .sp-l:nth-child(4n+4) { --r: 1.4deg; }
+:root:not(#_):not(#__) .sp-l:hover { z-index: 2; transform: translateY(-6px) rotate(0deg) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); }
+:root:not(#_):not(#__) .sp-l::after { content: none; }
+/* no pin, no tape */
+:root:not(#_):not(#__) .sp-l::before, :root:not(#_):not(#__) .sp-l::after { content: none !important; display: none !important; }
+:root:not(#_):not(#__) .sp-l:not(.pub) .spk-f { filter: saturate(.78) brightness(.97); }
+
+/* the postcard: front = picture, back = your words (fits the box, flips on tap) */
+:root:not(#_):not(#__) .spk-w { grid-area: k; position: relative; }
+:root:not(#_):not(#__) .spk { position: relative; width: 100%; height: 0; padding-top: calc(100% / var(--k-ar, 1.5627)); container-type: inline-size; cursor: pointer; border-radius: 6px; outline-offset: 5px; -webkit-tap-highlight-color: transparent; }
+:root:not(#_):not(#__) .spk-in { position: absolute; inset: 0; }
+:root:not(#_):not(#__) .spk-f { position: absolute; inset: 0; border-radius: 6px; overflow: hidden; background: #f4efe6; box-shadow: 0 2px 3px rgba(0, 0, 0, .18), 0 18px 30px -12px rgba(0, 0, 0, .55); transition: opacity .25s ease; }
+/* both faces stay laid out (so the text can be fitted); the one that is not showing is just invisible */
+:root:not(#_):not(#__) .spk-back { visibility: hidden; opacity: 0; }
+:root:not(#_):not(#__) .spk.flip .spk-front { visibility: hidden; opacity: 0; }
+:root:not(#_):not(#__) .spk.flip .spk-back { visibility: visible; opacity: 1; }
+:root:not(#_):not(#__) .spk.turned .spk-front, :root:not(#_):not(#__) .spk.turned .spk-back { animation: spk-turn .5s cubic-bezier(.3, .8, .3, 1); }
+@keyframes spk-turn { from { transform: perspective(1100px) rotateY(-80deg) scale(.96); } to { transform: perspective(1100px) rotateY(0) scale(1); } }
+:root:not(#_):not(#__) .spk-f img { width: 100%; height: 100%; object-fit: cover; display: block; margin: 0; }
+:root:not(#_):not(#__) .spk.contain .spk-front img { object-fit: contain; }
+/* glossy sheen sweeps over the front when you hover */
+:root:not(#_):not(#__) .spk-front::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .34) 50%, transparent 65%); transform: translateX(-130%); transition: transform .9s ease; pointer-events: none; }
+:root:not(#_):not(#__) .sp-l:hover .spk-front::after { transform: translateX(130%); }
+:root:not(#_):not(#__) .spk-cap { position: absolute; left: 4%; bottom: 6%; max-width: 84%; padding: 1.4cqw 3cqw; border-radius: 1cqw; background: var(--cap-bg, rgba(58, 44, 30, .9)); color: var(--cap-ink, #fff); box-shadow: 0 0 0 1px var(--cap-edge, transparent), 0 3px 10px rgba(0, 0, 0, .25); font: 700 5.4cqw/1.1 Caveat, cursive; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; z-index: 2; pointer-events: none; transition: background-color .4s ease, color .4s ease; }
+:root:not(#_):not(#__) .spk-msg { position: absolute; left: var(--k-x); top: var(--k-y); width: var(--k-w); height: var(--k-h); overflow: hidden; color: var(--tc, var(--ink)); }
+:root:not(#_):not(#__) .spk.cut .spk-msg { -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent); }
+:root:not(#_):not(#__) .spk-text { font: 700 4cqw/1.12 var(--tf, Caveat), cursive; word-break: break-word; }
+:root:not(#_):not(#__) .spk-text p, :root:not(#_):not(#__) .spk-text div { margin: 0 0 .5em; }
+:root:not(#_):not(#__) .spk-text ul, :root:not(#_):not(#__) .spk-text ol { margin: 0 0 .5em; padding-left: 1.1em; }
+:root:not(#_):not(#__) .spk-text .script { font-family: Caveat, cursive; }
+:root:not(#_):not(#__) .spk-text .ta-l { text-align: left; } :root:not(#_):not(#__) .spk-text .ta-c { text-align: center; } :root:not(#_):not(#__) .spk-text .ta-r { text-align: right; }
+:root:not(#_):not(#__) .spk-text .f-caveat { font-family: Caveat, cursive; } :root:not(#_):not(#__) .spk-text .f-kalam { font-family: Kalam, cursive; } :root:not(#_):not(#__) .spk-text .f-dancing { font-family: 'Dancing Script', cursive; }
+:root:not(#_):not(#__) .spk-text .f-lora { font-family: Lora, serif; } :root:not(#_):not(#__) .spk-text .f-elite { font-family: 'Special Elite', monospace; } :root:not(#_):not(#__) .spk-text .f-manrope { font-family: Manrope, sans-serif; }
+:root:not(#_):not(#__) .spk-to { position: absolute; left: var(--k-ax); width: var(--k-aw); top: var(--k-ay); transform: translateY(-92%); color: var(--ink); font: 700 5cqw/1 Caveat, cursive; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; z-index: 2; }
+:root:not(#_):not(#__) .spk-to span { opacity: .6; font-weight: 400; }
+:root:not(#_):not(#__) .spk-mark { position: absolute; right: 6%; bottom: 5%; width: 9cqw; aspect-ratio: 1; border: .4cqw solid var(--ink); border-radius: 50%; opacity: .34; display: flex; flex-direction: column; align-items: center; justify-content: center; transform: rotate(-12deg); color: var(--ink); font: 700 1.5cqw/1.2 Manrope, sans-serif; text-align: center; pointer-events: none; }
+:root:not(#_):not(#__) .spk-mark b { font-size: 1.1cqw; }
+:root:not(#_):not(#__) .spk-more { display: block; margin: 12px auto 0; background: none; border: 0; padding: 4px 8px; color: var(--sink); font: 700 13px Kalam, cursive; text-decoration: underline wavy color-mix(in srgb, var(--sa) 80%, transparent); text-underline-offset: 4px; cursor: pointer; }
+:root:not(#_):not(#__) .spk-more[hidden] { display: none; }
+
+/* under the card: title, who it is for, likes, public switch */
+:root:not(#_):not(#__) .sp-lt { grid-area: t; min-width: 0; display: grid; gap: 4px; align-content: start; padding: 0 2px; }
+:root:not(#_):not(#__) .sp-lt b { font-family: var(--pen); font-size: 19px; font-weight: 700; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; }
+:root:not(#_):not(#__) .sp-lt small, :root:not(#_):not(#__) .sp-lt .mut { font-family: var(--pen); font-size: 13px; opacity: .8; }
+:root:not(#_):not(#__) .sp-st { grid-area: st; width: auto; text-align: left; justify-self: start; margin-left: 2px; font-family: var(--marker); font-size: 21px; font-weight: 700; line-height: 1; opacity: .6; }
+:root:not(#_):not(#__) .sp-l.pub .sp-st { opacity: 1; padding: 2px 9px 3px; border: 2px solid var(--sa); color: var(--sink); border-radius: 7px; transform: rotate(-3deg); letter-spacing: .5px; text-transform: uppercase; font-size: 17px; background: color-mix(in srgb, var(--sa) 22%, transparent); }
+:root:not(#_):not(#__) .sp-sw { grid-area: sw; margin: 0; }
+:root:not(#_):not(#__) .sp-l .rx { margin-top: 6px; }
+:root:not(#_):not(#__) .sp-l .rx-b { background: color-mix(in srgb, var(--sink) 9%, transparent); color: var(--sink); border: 0; border-radius: 99px; }
+:root:not(#_):not(#__) .sp-l .rx-b.on { background: #e9605a; color: #fff; }
+:root:not(#_):not(#__) .sp-foot { display: block; margin-top: 16px; }
+html[data-eff="dark"]:not(#_):not(#__) .spw .sp-l :is(.sp-lt b, .sp-lt small, .sp-st) { color: var(--sink); }
+html[data-eff="dark"]:not(#_):not(#__) .spk-f { box-shadow: 0 2px 3px rgba(0, 0, 0, .5), 0 18px 30px -12px rgba(0, 0, 0, .8); }
+html[data-eff="dark"]:not(#_):not(#__) .sp-l:not(.pub) .spk-f { filter: saturate(.7) brightness(.85); }
+
+/* calm mode / reduced motion: notes stay still */
+html[data-calm] .sp-l, html[data-calm] .sp-stats div, html[data-calm] .spk-f { transition: none; animation: none !important; }
+html[data-calm] .sp-l:hover, html[data-calm] .sp-stats div:hover { transform: rotate(var(--r)); }
+@media (prefers-reduced-motion: reduce) {
+  :root:not(#_):not(#__) .sp-l, :root:not(#_):not(#__) .sp-stats div, :root:not(#_):not(#__) .spk-f { transition: none; animation: none !important; }
+  :root:not(#_):not(#__) .sp-l:hover, :root:not(#_):not(#__) .sp-stats div:hover { transform: rotate(var(--r)); }
+}
+@media (hover: none) { :root:not(#_):not(#__) .sp-l:hover, :root:not(#_):not(#__) .sp-stats div:hover { transform: rotate(var(--r)); } }
+
+/* ---------- 5. color wheel panel (Customize > Color) ---------- */
+:root:not(#_):not(#__) .sp-colwrap { min-width: 0; }
+:root:not(#_):not(#__) .sp-wheel { display: grid; gap: 10px; margin-top: 8px; padding: 14px; border-radius: 16px; background: color-mix(in srgb, var(--sink) 6%, transparent); border: 1px solid color-mix(in srgb, var(--sink) 14%, transparent); justify-items: center; }
+:root:not(#_):not(#__) .sp-wheel[hidden] { display: none; }
+:root:not(#_):not(#__) .sp-hex, :root:not(#_):not(#__) .sp-lite { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 260px; font-size: 13px; font-weight: 700; }
+:root:not(#_):not(#__) .sp-hex span, :root:not(#_):not(#__) .sp-lite span { width: 40px; flex: none; }
+:root:not(#_):not(#__) .sp-hex input { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, Consolas, monospace; text-transform: lowercase; }
+:root:not(#_):not(#__) .sp-lite input { flex: 1; min-width: 0; accent-color: var(--sa); height: 28px; }
+:root:not(#_):not(#__) .sp-wheel .cw { margin: 4px auto; order: 0; }
+:root:not(#_):not(#__) .spw .sp-custom.on { outline: 3px solid var(--sink); border-color: var(--scard); }
+:root:not(#_):not(#__) .spw .sp-custom[aria-expanded="true"] { box-shadow: 0 0 0 3px var(--sa); }
+html[data-eff="dark"]:not(#_):not(#__) .cw-in canvas { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sink, #fff) 35%, transparent); }
+
+/* ---------- 6. Settings: Save changes lives at the bottom ---------- */
+:root:not(#_):not(#__) .savebar { display: flex; justify-content: flex-end; margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line, #e6ddd3); }
+:root:not(#_):not(#__) .savebar .btn { min-height: 48px; padding: 0 26px; }
+@media (max-width: 700px) { :root:not(#_):not(#__) .savebar .btn { width: 100%; justify-content: center; } }

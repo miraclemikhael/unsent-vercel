@@ -1,0 +1,265 @@
+/* Unsent · css/phone.css · LAST phone layer (loaded after round4.css).
+   1) Top bar + bottom tab bar follow the chosen vibe + color on the Me page (same as desktop sidebar)
+   2) Tab bar pinned to the very bottom, safe-area aware
+   3) Write page header: no overlap
+   4) Small phone polish
+   One source of truth for the bars: --bar-bg / --bar-ink / --bar-line / --bar-on / --bar-on-ink. */
+
+:root {
+  --nav-h: 62px;
+  /* every page: bars wear a soft tint of YOUR chosen color; active tab = that color */
+  --bar-bg: color-mix(in srgb, var(--sa, #ffec85) 13%, var(--side));
+  --bar-ink: var(--ink);
+  --bar-line: var(--line);
+  --bar-on: var(--sa, #ffec85);
+  --bar-on-ink: var(--son, #292929);
+  --bar-mut: var(--mut);
+}
+/* Me page: bars take the vibe (bg + ink) and the color (active tab). Updated live by js/space.js */
+body:has(.spw) {
+  --bar-bg: color-mix(in srgb, var(--sbg) 90%, #000);
+  --bar-ink: var(--sink);
+  --bar-line: color-mix(in srgb, var(--sink) 16%, transparent);
+  --bar-on: var(--sa);
+  --bar-on-ink: var(--son);
+  --bar-mut: color-mix(in srgb, var(--sink) 70%, transparent);
+}
+/* no white flash / strip under the bars: the html itself wears the page color */
+html { background: var(--bg); }
+html:has(.spw) { background: var(--sbg); }
+
+@media (max-width: 900px) {
+  html, body { min-height: 100%; }
+  body { min-height: 100vh; min-height: 100dvh; }
+
+  /* ---------- top bar ---------- */
+  aside {
+    view-transition-name: none !important; /* this name traps the fixed tab bar inside the top bar */
+    background: var(--bar-bg) !important;
+    color: var(--bar-ink) !important;
+    border-bottom: 1px solid var(--bar-line) !important;
+    transition: background-color .35s ease, color .35s ease, border-color .35s ease;
+  }
+  body:has(.spw) aside { background: var(--bar-bg) !important; color: var(--bar-ink) !important; }
+  body:has(.spw) aside .logo { filter: var(--slogo, none); }
+  html[data-eff="dark"] body:has(.spw) aside .logo { filter: var(--slogo, none); }
+
+  /* ---------- bottom tab bar ---------- */
+  aside nav {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;       /* left 0, right 0, bottom 0 */
+    width: 100%; height: auto; margin: 0 !important;
+    z-index: 60;
+    display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 4px !important;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    background: var(--bar-bg) !important;
+    color: var(--bar-ink);
+    border-top: 1px solid var(--bar-line) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    overflow: visible !important;
+    transition: background-color .35s ease, border-color .35s ease;
+  }
+  /* paints the bar color far below the bar: no page content can ever show under it */
+  aside nav::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 160px;
+    background: var(--bar-bg); pointer-events: none; transition: background-color .35s ease;
+  }
+  /* less clutter: icons only. The open tab opens into a pill with its name */
+  aside nav a {
+    color: var(--bar-ink) !important;
+    flex: 1 1 0 !important; min-width: 0;
+    height: 46px; min-height: 46px; padding: 0 !important;
+    justify-content: center; align-items: center; flex-direction: row;
+    gap: 0; font-size: 0 !important; line-height: 0;   /* hides the label text, icon stays */
+    border-radius: 999px;
+    opacity: .78;
+    transition: background-color .25s ease, color .25s ease, flex-grow .3s ease, opacity .2s ease, transform .15s ease;
+  }
+  aside nav a svg { color: currentColor; width: 24px; height: 24px; flex: none; }
+  aside nav a:not(.on):hover svg { color: currentColor; }
+  aside nav a.on,
+  html[data-eff="dark"] aside nav a.on {
+    flex: 2.3 1 0 !important;
+    gap: 7px; font-size: 13px !important; line-height: 1; font-weight: 700; letter-spacing: 0;
+    background: var(--bar-on) !important;
+    color: var(--bar-on-ink) !important;
+    opacity: 1; white-space: nowrap;
+  }
+  aside nav a.on svg,
+  aside nav a.on:hover svg,
+  html[data-eff="dark"] aside nav a.on svg,
+  html[data-eff="dark"] aside nav a.on:hover svg { color: var(--bar-on-ink) !important; }
+  aside nav a .nb { top: 4px !important; right: calc(50% - 18px) !important; }
+  aside nav a.on .nb { right: 10px !important; }
+
+  /* the page leaves room for the bar so nothing hides under it */
+  main {
+    padding-bottom: calc(var(--nav-h) + 24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .fx-top { bottom: calc(var(--nav-h) + 14px + env(safe-area-inset-bottom, 0px)) !important; }
+}
+
+/* the avatar in the top bar reads well on any vibe */
+@media (max-width: 900px) {
+  aside .me { background: transparent; }
+  aside .me .av { box-shadow: 0 0 0 2px color-mix(in srgb, var(--bar-ink) 18%, transparent); }
+}
+
+/* ==========================================================================
+   Write page header (phones): title / To + type / saved + undo redo.
+   Explicit grid, no leftovers from older layers.
+   ========================================================================== */
+@media (max-width: 900px) {
+  .card.ed .eh {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
+    align-items: center;
+    gap: 8px 10px;
+    padding: 14px 14px 10px;
+    flex-wrap: nowrap;
+  }
+  .card.ed .eh .ehl,
+  .card.ed .eh .meta { display: contents !important; }
+
+  .card.ed .eh input#ttl { grid-column: 1 / -1; grid-row: 1; width: 100%; min-width: 0; font-size: 19px; line-height: 1.25; padding: 2px 0 4px; text-overflow: ellipsis; }
+
+  .card.ed .eh .chipto {
+    grid-column: 1; grid-row: 2;
+    width: 100%; min-width: 0; max-width: 100%;
+    height: 40px; display: flex;
+  }
+  .card.ed .eh .chipto em { flex: none; }
+  .card.ed .eh .chipto input { flex: 1 1 auto; width: 100% !important; min-width: 0; max-width: none !important; text-align: left; padding-left: 8px; }
+
+  .card.ed .eh .kindw { grid-column: 2; grid-row: 2; min-width: 0; max-width: 46vw; }
+  .card.ed .eh select.tag { width: 100%; min-height: 40px; height: 40px; padding: 0 30px 0 14px; font-size: 13px; text-overflow: ellipsis; }
+
+  .card.ed .eh #sv { grid-column: 1; grid-row: 3; display: block !important; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+  .card.ed .eh .ib-row { grid-column: 2; grid-row: 3; order: 0; margin: 0; display: flex; gap: 6px; justify-self: end; }
+  .card.ed .eh .ib { width: 40px; height: 40px; border-radius: 12px; }
+}
+@media (max-width: 380px) {
+  .card.ed .eh { padding: 12px 12px 8px; }
+  .card.ed .eh .ib { width: 38px; height: 38px; }
+  .card.ed .eh .kindw { max-width: 42vw; }
+}
+
+/* ==========================================================================
+   Small phone polish
+   ========================================================================== */
+@media (max-width: 900px) {
+  /* every tap target at least 44px */
+  .btn, .btn.sm { min-height: 44px; }
+  .ib { min-width: 42px; min-height: 42px; }
+  .sw { min-width: 46px; }
+  /* swipe rows: hide bars, keep momentum */
+  .ed .tb, .ed .tpl, .sp-vibes, .tabs { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ed .tb::-webkit-scrollbar, .ed .tpl::-webkit-scrollbar, .sp-vibes::-webkit-scrollbar { display: none; }
+  /* sticky editor toolbar sits right under the top bar */
+  .ed .tb { top: calc(var(--top-h, 52px) + env(safe-area-inset-top, 0px)); background: var(--card); }
+  /* lined paper: lines match the 32px text rhythm */
+  .ed .sheet #ed { line-height: 32px; }
+  /* long words / emails never push the page sideways */
+  main, .card { overflow-wrap: anywhere; }
+}
+@media (max-width: 480px) {
+  .sp-stats { gap: 8px; }
+  .sp-stats div { padding: 12px 4px; border-radius: 14px; }
+  .sp-stats small { font-size: 10.5px; }
+  .sp-row { grid-template-columns: 1fr; gap: 8px; }   /* label above the control: more room on a phone */
+  .sp-act { display: grid; grid-template-columns: 1fr; }
+  .sp-act .btn { width: 100%; }
+}
+
+/* unread badge keeps normal text metrics even though tab labels are hidden */
+@media (max-width: 900px) { aside nav a .nb { line-height: 1; font-size: 10px !important; } }
+
+/* ==========================================================================
+   Banner + profile photo editor (js/cropper.js)
+   ========================================================================== */
+html.crp-open, html.crp-open body { overflow: hidden; }
+.crp { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; background: rgba(8, 8, 7, .78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.crp-p { width: min(560px, 100%); max-height: 100%; overflow: auto; display: grid; gap: 14px; padding: 16px; border-radius: 22px; background: #1c1a18; color: #f4efe9; border: 1px solid #36322f; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); font-family: Manrope, sans-serif; }
+.crp-h { display: grid; gap: 2px; } .crp-h b { font-size: 16px; } .crp-h small { color: #aaa29a; font-size: 12px; }
+.crp-st { display: grid; place-items: center; padding: 6px 0; }
+.crp-f { position: relative; width: min(100%, 480px); aspect-ratio: 3 / 1; overflow: hidden; border-radius: 14px; background: #000; touch-action: none; cursor: grab; box-shadow: 0 0 0 2px #ffec85; user-select: none; -webkit-user-select: none; }
+.crp-f:active { cursor: grabbing; }
+.crp-f.round { width: min(78vw, 300px); aspect-ratio: 1; border-radius: 50%; }
+.crp-f img { position: absolute; left: 0; top: 0; max-width: none; max-height: none; transform-origin: 0 0; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+.crp-f::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background:
+  linear-gradient(#fff3 1px, transparent 1px) 0 33.33% / 100% 33.34% repeat-y, linear-gradient(90deg, #fff3 1px, transparent 1px) 33.33% 0 / 33.34% 100% repeat-x; opacity: .7; }
+.crp-c { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.crp-n { width: 44px; height: 44px; border-radius: 12px; border: 1px solid #36322f; background: #262321; color: #f4efe9; font-size: 15px; cursor: pointer; }
+.crp-n:active { transform: scale(.94); }
+.crp-z { display: flex; align-items: center; gap: 8px; flex: 1 1 100%; }
+.crp-z input[type=range] { flex: 1; min-width: 0; padding: 0; border: 0; background: none; height: 28px; accent-color: #ffec85; }
+.crp-a { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; } .crp-sp { flex: 1; }
+.crp-b { min-height: 44px; padding: 0 18px; border-radius: 12px; font: 700 13px Manrope, sans-serif; cursor: pointer; border: 1px solid #36322f; }
+.crp-b.ghost { background: #262321; color: #f4efe9; }
+.crp-b.main { background: #ffec85; color: #292929; border-color: #e8c93f; }
+.crp-b:focus-visible, .crp-n:focus-visible { outline: 2px solid #ffec85; outline-offset: 2px; }
+
+/* banner: always 3:1 so what you framed is what you see */
+.sp-banner { height: auto !important; aspect-ratio: 3 / 1; max-height: 240px; min-height: 96px; background-size: cover !important; background-position: center !important; }
+.bn-act { flex-wrap: wrap; justify-content: flex-end; max-width: calc(100% - 24px); }
+@media (max-width: 420px) { .bn-b span { display: none; } .bn-b { min-width: 44px; min-height: 44px; justify-content: center; } #bnb span { display: inline; } }
+
+/* little camera on the profile photo (Me page) */
+.av-w { position: relative; display: block; width: 92px; height: 92px; margin-top: -46px; margin-left: 2px; z-index: 2; flex: none; }
+.av-w .av, .av-w .av.big { margin: 0 !important; }
+.av-edit { position: absolute; right: -2px; bottom: -2px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; border: 3px solid var(--scard, var(--card)); background: var(--sa, #ffec85); color: var(--son, #292929); cursor: pointer; padding: 0; z-index: 3; }
+.av-edit:active { transform: scale(.92); }
+.av-edit:focus-visible { outline: 2px solid var(--sink, #292929); outline-offset: 2px; }
+
+/* ==========================================================================
+   Write page top (phones): one clear main button, two quiet ones, a calm banner
+   ========================================================================== */
+@media (max-width: 900px) {
+  .top:has(+ .write3d) { margin-bottom: 10px; gap: 10px; }
+  .top:has(+ .write3d) h1 { font-size: 26px; letter-spacing: -.01em; }
+
+  /* buttons: "Keep it unsent" on top, full width. Email + Save draft side by side under it */
+  .top:has(+ .write3d) .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+  .top:has(+ .write3d) .acts .btn { min-height: 46px; padding: 0 12px; font-size: 13px; border-radius: 14px; width: 100%; gap: 7px; transition: transform .15s ease, background-color .2s ease; }
+  .top:has(+ .write3d) .acts .btn:last-child {
+    grid-column: 1 / -1; order: -1; min-height: 52px; font-size: 14.5px; border-radius: 16px;
+    background: var(--sa, #ffec85) !important; color: var(--son, #292929) !important; border: 0 !important;
+    box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--sa, #ffec85) 80%, #000), inset 0 1px 0 #ffffff55;
+  }
+  .top:has(+ .write3d) .acts .btn.wh {
+    background: transparent !important; color: var(--ink) !important;
+    border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent) !important; box-shadow: none;
+  }
+  .top:has(+ .write3d) .acts .btn:active { transform: scale(.97); }
+
+  /* banner: soft glow of your color, text centered, paper + pen on the right */
+  .top + .write3d {
+    height: 104px; margin: 0 0 12px; border-radius: 22px;
+    background:
+      radial-gradient(90px 70px at 82% 40%, #ffffff80, transparent 70%),
+      radial-gradient(#ffffff55 1px, transparent 1.4px) 0 0 / 14px 14px,
+      linear-gradient(135deg, color-mix(in srgb, var(--sa, #ffec85) 40%, #fff), color-mix(in srgb, var(--sa, #ffec85) 82%, #fff));
+    border: 1px solid color-mix(in srgb, var(--sa, #ffec85) 60%, #000 8%);
+    box-shadow: 0 14px 28px -20px color-mix(in srgb, var(--sa, #ffec85) 90%, #000);
+  }
+  .top + .write3d::after {
+    content: "Say it.\A Keep it unsent."; white-space: pre;
+    left: 18px; bottom: auto; top: 50%; transform: translateY(-50%);
+    font: 700 24px/1.05 Caveat, cursive; color: #2a2a2a;
+  }
+}
+@media (max-width: 900px) {
+  html[data-eff="dark"]:not(#_) .top + .write3d {
+    background:
+      radial-gradient(110px 80px at 82% 42%, color-mix(in srgb, var(--sa, #ffec85) 34%, transparent), transparent 72%),
+      radial-gradient(#ffffff12 1px, transparent 1.4px) 0 0 / 14px 14px,
+      linear-gradient(150deg, #2d2919, #1c1a16);
+    border-color: color-mix(in srgb, var(--sa, #ffec85) 28%, #1c1a16);
+    box-shadow: inset 0 1px 0 #ffffff10;
+  }
+  html[data-eff="dark"]:not(#_) .top + .write3d::after { color: color-mix(in srgb, var(--sa, #ffec85) 85%, #fff); text-shadow: 0 0 18px color-mix(in srgb, var(--sa, #ffec85) 40%, transparent); }
+  html[data-eff="dark"]:not(#_) .top:has(+ .write3d) .acts .btn.wh { color: var(--ink) !important; }
+}

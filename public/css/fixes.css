@@ -1,0 +1,52 @@
+/* Unsent fixes: friends add row, empty state, vibe + color scrolling */
+
+/* Friends: input and Add button stay on one line */
+.fadd .frow { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: stretch; gap: 8px; width: 100%; }
+.fadd .frow input { flex: 1 1 auto !important; min-width: 0 !important; width: auto !important; }
+.fadd .frow .btn { flex: 0 0 auto !important; width: auto !important; margin: 0 !important; white-space: nowrap; align-self: stretch; }
+.flist > small { display: block; margin: 10px 0 14px; }
+
+/* Friends: empty state centered, icon on its own line */
+.flist .hush { display: grid !important; justify-items: center; text-align: center; gap: 10px; padding: 22px 18px; margin-top: 12px; border: 1.5px dashed var(--line, rgba(0,0,0,.18)); border-radius: 18px; }
+.flist .hush > svg { display: block; margin: 0 auto; }
+.flist .hush b { display: block; font-size: 22px; line-height: 1.2; }
+.flist .hush p { margin: 0; max-width: 30ch; }
+
+/* Make it yours: vibes scroll sideways, thin bar shows it scrolls */
+.spw .sp-vibes { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; scrollbar-width: thin !important; scrollbar-color: color-mix(in srgb, currentColor 35%, transparent) transparent; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; padding-bottom: 12px !important; }
+.spw .sp-vibes::-webkit-scrollbar { display: block !important; height: 5px; }
+.spw .sp-vibes::-webkit-scrollbar-thumb { background: color-mix(in srgb, currentColor 35%, transparent); border-radius: 99px; }
+
+/* Make it yours: one scrolling row of colors, color wheel first */
+.spw .sp-cols { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; gap: 12px !important; padding: 6px 4px 12px !important; scrollbar-width: thin !important; scrollbar-color: color-mix(in srgb, currentColor 35%, transparent) transparent; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+.spw .sp-cols::-webkit-scrollbar { display: block !important; height: 5px; }
+.spw .sp-cols::-webkit-scrollbar-thumb { background: color-mix(in srgb, currentColor 35%, transparent); border-radius: 99px; }
+.spw .sp-cols .sp-c { flex: 0 0 42px !important; width: 42px !important; height: 42px !important; aspect-ratio: 1; scroll-snap-align: start; }
+.spw .sp-cols .sp-custom { order: -1; flex-basis: 52px !important; width: 52px !important; height: 52px !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--sink, #222) 18%, transparent); }
+
+/* ---- Friends, phone: hide the 2nd "Your quiet corner" panel (the top card already says it) ---- */
+@media (max-width: 900px) {
+  .fgrid .nochat { display: none !important; }
+  .fgrid .card.chat:has(.nochat) { display: none !important; }
+}
+
+/* ---- Me page: top bar + bottom tab bar follow the page color (background, ink, accent) ---- */
+html:not(#_):not(#__) body:has(.spw) {
+  --bar-bg: var(--sbg, var(--side));
+  --bar-ink: var(--sink, var(--ink));
+  --bar-line: color-mix(in srgb, var(--sink, #2a2a2a) 16%, transparent);
+  --bar-mut: color-mix(in srgb, var(--sink, #2a2a2a) 72%, var(--sbg, #fff));
+  --bar-on: var(--sa, var(--y, #ffec85));
+  --bar-on-ink: var(--son, #2a2a2a);
+}
+html:not(#_):not(#__) body:has(.spw) aside { background: var(--bar-bg) !important; color: var(--bar-ink) !important; transition: background .35s, color .35s; }
+html:not(#_):not(#__) body:has(.spw) aside nav { background: var(--bar-bg) !important; border-top-color: var(--bar-line) !important; }
+html:not(#_):not(#__) body:has(.spw) aside nav a { color: var(--bar-ink); }
+html:not(#_):not(#__) body:has(.spw) aside nav a.on { background: var(--bar-on) !important; color: var(--bar-on-ink) !important; }
+html:not(#_):not(#__) body:has(.spw) aside .logo { filter: var(--slogo, none); }
+
+/* ---- color wheel (js/colorwheel.js) ---- */
+.cw { display: grid; justify-items: center; margin: 14px auto 6px; width: 100%; }
+.cw-in { position: relative; width: 180px; height: 180px; }
+.cw-in canvas { display: block; width: 180px; height: 180px; border-radius: 50%; touch-action: none; cursor: crosshair; box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 28%, transparent); }
+.cw-dot { position: absolute; width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 1.5px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.35); transform: translate(-50%, -50%); pointer-events: none; }
