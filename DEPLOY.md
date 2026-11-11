@@ -91,7 +91,8 @@ Or with the CLI: `npm i -g vercel`, then `vercel` in this folder.
 ## 4. After the first deploy
 
 - Open the site, **Create account**.
-- Make yourself admin (run in HeidiSQL): `UPDATE users SET role='admin' WHERE email='you@example.com';`
+- Make yourself admin (TiDB Cloud → **SQL Editor**, or any MySQL client):
+  `UPDATE users SET role='admin' WHERE email='you@example.com';`
 - Google sign-in: add your Vercel URL (e.g. `https://yourapp.vercel.app`) to *Authorized JavaScript origins* in Google Cloud Console.
 - Gmail codes / email letter: set `GMAIL_USER` and `GMAIL_APP_PASSWORD` (see `SETUP-EMAIL.md` in the old project).
 
